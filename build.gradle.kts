@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.lizongying"
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     maven {
@@ -22,16 +22,6 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-}
-
-signing {
-    val signingKey: String? = System.getenv("GPG_PRIVATE_KEY")
-    val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
-
-    if (signingKey != null && signingPassword != null) {
-        useInMemoryPgpKeys(signingKey, signingPassword)
-        sign(publishing.publications["mavenJava"])
-    }
 }
 
 publishing {
@@ -85,6 +75,18 @@ publishing {
                     password = System.getenv("MAVEN_PASSWORD")
                 }
             }
+        }
+    }
+}
+
+afterEvaluate {
+    signing {
+        val signingKey: String? = System.getenv("GPG_PRIVATE_KEY")
+        val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
+
+        if (signingKey != null && signingPassword != null) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+            sign(publishing.publications["mavenJava"])
         }
     }
 }
