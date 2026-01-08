@@ -20,7 +20,7 @@ kotlin實現。
 * [python](https://github.com/lizongying/lzy-codec-py)
 * [dart](https://github.com/lizongying/lzy-codec-dart)
 * [swift](https://github.com/lizongying/lzy-codec-swift)
-* [ruby](https://github.com/lizongying/lzy-codec-ruby)
+* [ruby](https://github.com/lizongying/lzy-codec-rb)
 * [wasm](https://github.com/lizongying/lzy-codec-wasm)
 
 ## Install
@@ -31,14 +31,14 @@ kotlin實現。
     <dependency>
         <groupId>io.github.lizongying</groupId>
         <artifactId>lzy-codec</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.1</version>
     </dependency>
     ```
 
 * gradle
     ```
     // https://mvnrepository.com/artifact/io.github.lizongying/lzy-codec
-    implementation("io.github.lizongying:lzy-codec:0.1.0")
+    implementation("io.github.lizongying:lzy-codec:0.1.1")
     ```
 
 ## Examples

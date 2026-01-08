@@ -3,6 +3,7 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 group = "io.github.lizongying"
@@ -50,44 +51,50 @@ publishing {
                 }
 
                 scm {
+                    connection.set("scm:git:git://github.com/lizongying/lzy-codec-kt.git")
+                    developerConnection.set("scm:git:ssh://github.com/lizongying/lzy-codec-kt.git")
                     url.set("https://github.com/lizongying/lzy-codec-kt")
                 }
             }
         }
     }
 
+//    repositories {
+//        if (version.toString().endsWith("-SNAPSHOT")) {
+//            maven {
+//                name = "OSSRHSnapshot"
+//                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+//                credentials {
+//                    username = System.getenv("MAVEN_USERNAME")
+//                    password = System.getenv("MAVEN_PASSWORD")
+//                }
+//            }
+//        } else {
+//            maven {
+//                name = "OSSRHRelease"
+//                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+//                credentials {
+//                    username = System.getenv("MAVEN_USERNAME")
+//                    password = System.getenv("MAVEN_PASSWORD")
+//                }
+//            }
+//        }
+//    }
+}
+
+nexusPublishing {
     repositories {
-        if (version.toString().endsWith("-SNAPSHOT")) {
-            maven {
-                name = "OSSRHSnapshot"
-                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
-            }
-        } else {
-            maven {
-                name = "OSSRHRelease"
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
-            }
-        }
+        sonatype()
     }
 }
 
 afterEvaluate {
     signing {
-        val signingKey: String? = System.getenv("GPG_PRIVATE_KEY")
-        val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
-
-        if (signingKey != null && signingPassword != null) {
-            useInMemoryPgpKeys(signingKey, signingPassword)
-            sign(publishing.publications["mavenJava"])
-        }
+        useInMemoryPgpKeys(
+            findProperty("signingKey")?.toString(),
+            findProperty("signingPassword")?.toString()
+        )
+        sign(publishing.publications["mavenJava"])
     }
 }
 
