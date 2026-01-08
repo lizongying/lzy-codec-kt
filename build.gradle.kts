@@ -25,11 +25,26 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveBaseName.set(project.name)
+    archiveClassifier.set("sources")
+    val mainSourceSet = sourceSets.main.get()
+
+    from(mainSourceSet.allJava)
+}
+
+val javadocJar by tasks.registering(Jar::class) {
+    archiveBaseName.set(project.name)
+    archiveClassifier.set("javadoc")
+    from(tasks.javadoc)
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-
+            artifact(sourcesJar.get())
+            artifact(javadocJar.get())
             pom {
                 name.set("lzy-codec")
                 description.set("一種變長文本編解碼方案，支持對Unicode進行編解碼。編解碼效率、存儲空間全面優於UTF-8，未來會替代UTF-8成為新的世界通用編解碼標準。")
@@ -58,33 +73,14 @@ publishing {
             }
         }
     }
-
-//    repositories {
-//        if (version.toString().endsWith("-SNAPSHOT")) {
-//            maven {
-//                name = "OSSRHSnapshot"
-//                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-//                credentials {
-//                    username = System.getenv("MAVEN_USERNAME")
-//                    password = System.getenv("MAVEN_PASSWORD")
-//                }
-//            }
-//        } else {
-//            maven {
-//                name = "OSSRHRelease"
-//                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-//                credentials {
-//                    username = System.getenv("MAVEN_USERNAME")
-//                    password = System.getenv("MAVEN_PASSWORD")
-//                }
-//            }
-//        }
-//    }
 }
 
 nexusPublishing {
     repositories {
-        sonatype()
+        sonatype {
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+        }
     }
 }
 
