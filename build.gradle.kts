@@ -29,7 +29,6 @@ val sourcesJar by tasks.registering(Jar::class) {
     archiveBaseName.set(project.name)
     archiveClassifier.set("sources")
     val mainSourceSet = sourceSets.main.get()
-
     from(mainSourceSet.allJava)
 }
 
