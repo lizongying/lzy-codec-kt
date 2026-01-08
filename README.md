@@ -7,6 +7,8 @@ kotlin實現。
 
 [maven](https://mvnrepository.com/artifact/io.github.lizongying/lzy-codec)
 
+[sonatype](https://central.sonatype.com/artifact/io.github.lizongying/lzy-codec)
+
 更多cli工具請參考 [go](https://github.com/lizongying/lzy-codec-go)
 
 ## Other languages
